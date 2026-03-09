@@ -12,42 +12,31 @@ void setup() {
   pinMode(led, OUTPUT);
 }
 
-void get_distance() {
 
+void loop() {
+  int lecture = analogRead(capteurTemp);
+  temperatureC = (lecture * 5.0 * 100.0) / 1023;
+  
+  // Mesure distance
   digitalWrite(TRIG, LOW);
   delayMicroseconds(2);
-
   digitalWrite(TRIG, HIGH);
   delayMicroseconds(10);
   digitalWrite(TRIG, LOW);
-
   long duree = pulseIn(ECHO, HIGH);
   float distance = duree * 0.034 / 2;
 
-  Serial.print("Distance : ");
-  Serial.print(distance);
-  Serial.println(" cm");
- 
   if (distance < 5) {
-    digitalWrite(led, HIGH); // allumer LED
-    Serial.println("!!!!! < 5cm");
+    digitalWrite(led, HIGH);
+  } else {
+    digitalWrite(led, LOW);
   }
-  else {
-    digitalWrite(led, LOW); 
-  }
-}
 
-void get_temperature() {
-  int lecture = analogRead(capteurTemp);           // lire la valeur analogique (0-1023)
-  temperatureC = (lecture * 5.0 * 100.0) / 1023;  // conversion en °C
-  Serial.print("Temperature: ");
+  // Envoi formaté pour Python
+  Serial.print("temp=");
   Serial.print(temperatureC);
-  Serial.println(" °C");
-}
+  Serial.print(";dist=");
+  Serial.println(distance);  // println ajoute automatiquement '\n'
 
-
-void loop(){
-  get_temperature();
-  get_distance();
-  delay(500);
+  delay(1000);
 }
