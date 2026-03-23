@@ -4,8 +4,8 @@
 
 $host = "localhost";
 $user = "root";
-$pass = "ton_mdp";
-$dbname = "ton_db";
+$pass = "";
+$dbname = "capteurs_bd";
 
 $conn = mysqli_connect($host, $user, $pass, $dbname);
 

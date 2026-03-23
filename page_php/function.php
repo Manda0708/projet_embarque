@@ -21,9 +21,9 @@ function prepareChartData($mesures){
     $distances = [];
 
     foreach($mesures as $row){
-        $dates[] = $row['date_heure'];
-        $temps[] = $row['temperature'];
-        $distances[] = $row['distance'];
+        $dates[] = $row['datetime'];
+        $temps[] = $row['temp'];
+        $distances[] = $row['dist'];
     }
 
     return [
