@@ -3,14 +3,13 @@ import mysql.connector
 from datetime import datetime
 
 # 1️⃣ Configurer le port série
-# Remplace 'COM3' par le port où est branché ton Arduino
 ser = serial.Serial('COM3', 9600, timeout=1)
 
 # 2️⃣ Configurer la connexion MySQL
 db = mysql.connector.connect(
     host="localhost",
-    user="root",      # ton utilisateur MySQL
-    password="",  # ton mot de passe
+    user="root",     
+    password="",  
     database="capteurs_bd"
 )
 cursor = db.cursor()
@@ -24,18 +23,19 @@ try:
             try:
                 parts = line.split(';')
                 temp = float(parts[0].split('=')[1])
-                dist = float(parts[1].split('=')[1])
+                hum = float(parts[1].split('=')[1])
+                dist = float(parts[2].split('=')[1]) 
                 
                 # Ajouter timestamp
                 now = datetime.now()
                 
                 # 4️⃣ Insérer dans la base de données
-                sql = "INSERT INTO mesures (temp, dist, datetime) VALUES (%s, %s, %s)"
-                val = (temp, dist, now)
+                sql = "INSERT INTO mesures (temp, hum, dist, datetime) VALUES (%s, %s, %s, %s)"
+                val = (temp, hum, dist, now)
                 cursor.execute(sql, val)
                 db.commit()
                 
-                print(f"[{now}] Temp: {temp}°C, Distance: {dist}cm - enregistré en DB")
+                print(f"[{now}] Temp: {temp}°C, Humidité: {hum}%, Distance: {dist}cm - enregistré en DB")
                 
             except Exception as e:
                 print("Erreur parsing ligne:", line, e)
