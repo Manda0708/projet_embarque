@@ -2,10 +2,10 @@ import serial
 import mysql.connector
 from datetime import datetime
 
-# 1️⃣ Configurer le port série
+# Configurer le port série
 ser = serial.Serial('COM3', 9600, timeout=1)
 
-# 2️⃣ Configurer la connexion MySQL
+# Configurer la connexion MySQL
 db = mysql.connector.connect(
     host="localhost",
     user="root",     
@@ -14,7 +14,7 @@ db = mysql.connector.connect(
 )
 cursor = db.cursor()
 
-# 3️⃣ Boucle de lecture
+# Boucle de lecture
 try:
     while True:
         line = ser.readline().decode('utf-8').strip()  # lire et décoder la ligne
@@ -29,12 +29,12 @@ try:
                 # Ajouter timestamp
                 now = datetime.now()
                 
-                # 4️⃣ Insérer dans la base de données
+                # Insérer dans la base de données
                 sql = "INSERT INTO mesures (temp, hum, dist, datetime) VALUES (%s, %s, %s, %s)"
                 val = (temp, hum, dist, now)
                 cursor.execute(sql, val)
                 db.commit()
-                
+                 
                 print(f"[{now}] Temp: {temp}°C, Humidité: {hum}%, Distance: {dist}cm - enregistré en DB")
                 
             except Exception as e:
