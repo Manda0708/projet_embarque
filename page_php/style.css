@@ -1,12 +1,8 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-body {
-    font-family: sans-serif;
-    background: #f4f4f4;
-    color: #333;
-    min-height: 100vh;
-}
+body { font-family: sans-serif; background: #f0f4f8; color: #333; min-height: 100vh; }
 
+/* ── Header ──────────────────────────────────────────────────────────────── */
 header {
     display: flex;
     justify-content: space-between;
@@ -15,12 +11,29 @@ header {
     background: #fff;
     border-bottom: 1px solid #e0e0e0;
 }
+.header-left  { display: flex; align-items: center; gap: 12px; }
+.header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.header-icon  { font-size: 1.8rem; }
+header h1     { font-size: 1.1rem; color: #333; margin: 0; }
+.header-sub   { font-size: .75rem; color: #aaa; }
+#status       { font-size: .8rem; color: #aaa; }
 
-header h1 { font-size: 1.2rem; color: #333; }
+/* ── Boutons de vue ──────────────────────────────────────────────────────── */
+.view-toggle { display: flex; gap: 6px; }
+.view-btn {
+    padding: .4rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: #fff;
+    cursor: pointer;
+    font-size: .82rem;
+    color: #555;
+    transition: all .2s;
+}
+.view-btn:hover  { background: #f5f5f5; }
+.view-btn.active { background: #333; color: #fff; border-color: #333; }
 
-#status { font-size: .8rem; color: #aaa; }
-
-/* ── Layout dashboard ────────────────────────────────────────────────────── */
+/* ── Layout ──────────────────────────────────────────────────────────────── */
 .dashboard {
     display: grid;
     grid-template-columns: 1fr 280px;
@@ -29,185 +42,107 @@ header h1 { font-size: 1.2rem; color: #333; }
     max-width: 1200px;
     margin: 0 auto;
 }
-
-@media (max-width: 800px) {
-    .dashboard { grid-template-columns: 1fr; }
-}
+@media (max-width: 800px) { .dashboard { grid-template-columns: 1fr; } }
 
 /* ── Cards ───────────────────────────────────────────────────────────────── */
-.card {
-    background: #fff;
-    border-radius: 10px;
-    padding: 1rem 1.25rem;
-    border: 1px solid #e8e8e8;
-    margin-bottom: 1rem;
-}
-
+.card { background: #fff; border-radius: 10px; padding: 1rem 1.25rem; border: 1px solid #e8e8e8; margin-bottom: 1rem; }
 .card:last-child { margin-bottom: 0; }
-
-.card h3 {
-    font-size: .9rem;
-    font-weight: 600;
-    margin-bottom: .75rem;
-    color: #555;
-}
+.card h3 { font-size: .9rem; font-weight: 600; margin-bottom: .75rem; color: #555; }
 
 /* ── Filtres ─────────────────────────────────────────────────────────────── */
-.controls {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    margin-bottom: 1rem;
-}
-
-.controls label {
-    display: block;
-    font-size: .75rem;
-    color: #888;
-    font-weight: 600;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-}
-
+.controls { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; margin-bottom: 1rem; }
+.controls label { display: block; font-size: .75rem; color: #888; font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
 .btn-group { display: flex; gap: 4px; flex-wrap: wrap; }
-
-.btn {
-    padding: .35rem .8rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background: #fff;
-    cursor: pointer;
-    font-size: .8rem;
-    color: #555;
-    transition: all .15s;
-}
-
+.btn { padding: .35rem .8rem; border: 1px solid #ddd; border-radius: 6px; background: #fff; cursor: pointer; font-size: .8rem; color: #555; transition: all .15s; }
 .btn:hover { background: #f5f5f5; }
-.btn.active            { background: #555;    color: #fff; border-color: #555; }
-.btn.metric-temp.active { background: #e74c3c; color: #fff; border-color: #e74c3c; }
-.btn.metric-hum.active  { background: #27ae60; color: #fff; border-color: #27ae60; }
-.btn.metric-dist.active { background: #2980b9; color: #fff; border-color: #2980b9; }
-.btn.metric-all.active  { background: #555;    color: #fff; border-color: #555; }
-
-input[type="date"] {
-    padding: .35rem .6rem;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: .8rem;
-    color: #555;
-}
+.btn.active              { background: #555;    color: #fff; border-color: #555; }
+.btn.metric-temp.active  { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+.btn.metric-hum.active   { background: #27ae60; color: #fff; border-color: #27ae60; }
+.btn.metric-niveau.active{ background: #0ea5e9; color: #fff; border-color: #0ea5e9; }
+.btn.metric-all.active   { background: #555;    color: #fff; border-color: #555; }
+input[type="date"] { padding: .35rem .6rem; border: 1px solid #ddd; border-radius: 6px; font-size: .8rem; color: #555; }
 
 /* ── Graphiques ──────────────────────────────────────────────────────────── */
-.chart-box {
-    margin-bottom: 1.25rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid #f0f0f0;
-}
-
+.chart-box { margin-bottom: 1.25rem; padding-bottom: 1.25rem; border-bottom: 1px solid #f0f0f0; }
 .chart-box:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+.chart-box h2 { font-size: .8rem; font-weight: 600; color: #888; margin-bottom: .5rem; text-transform: uppercase; letter-spacing: .04em; }
+.chart-box .unit { font-weight: 400; color: #bbb; }
 
-.chart-box h2 {
-    font-size: .8rem;
-    font-weight: 600;
-    color: #888;
-    margin-bottom: .5rem;
-    text-transform: uppercase;
-    letter-spacing: .04em;
-}
-
-.chart-box .unit {
-    font-weight: 400;
-    color: #bbb;
-}
-
-/* ── Valeurs actuelles ───────────────────────────────────────────────────── */
-.live-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: .5rem 0;
-    border-bottom: 1px solid #f5f5f5;
-    font-size: .9rem;
-}
-
+/* ── Valeurs live ────────────────────────────────────────────────────────── */
+.live-row { display: flex; justify-content: space-between; align-items: center; padding: .45rem 0; border-bottom: 1px solid #f5f5f5; font-size: .9rem; }
 .live-row:last-of-type { border-bottom: none; }
 .live-label { color: #777; }
-.live-val   { font-weight: 600; font-size: 1rem; color: #333; }
-
-.alert-badge {
-    margin-top: .75rem;
-    padding: .4rem .8rem;
-    border-radius: 6px;
-    font-size: .8rem;
-    font-weight: 600;
-    text-align: center;
-}
-
+.live-val   { font-weight: 600; color: #333; }
+.alert-badge { margin-top: .75rem; padding: .4rem .8rem; border-radius: 6px; font-size: .8rem; font-weight: 600; text-align: center; }
 .alert-on  { background: #fdecea; color: #c0392b; }
 .alert-off { background: #eafaf1; color: #1e8449; }
 
 /* ── Stats ───────────────────────────────────────────────────────────────── */
-.stat-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-}
-
-.stat {
-    background: #f9f9f9;
-    border-radius: 8px;
-    padding: .6rem .75rem;
-}
-
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.stat      { background: #f9f9f9; border-radius: 8px; padding: .6rem .75rem; }
 .stat.full { grid-column: 1 / -1; }
-
-.stat-label {
-    font-size: .72rem;
-    color: #999;
-    margin-bottom: 2px;
-    text-transform: uppercase;
-    letter-spacing: .03em;
-}
-
-.stat-value {
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.stat-unit {
-    font-size: .75rem;
-    font-weight: 400;
-    color: #aaa;
-    margin-left: 2px;
-}
+.stat-label { font-size: .72rem; color: #999; margin-bottom: 2px; text-transform: uppercase; letter-spacing: .03em; }
+.stat-value { font-size: 1.3rem; font-weight: 600; color: #333; }
+.stat-unit  { font-size: .75rem; font-weight: 400; color: #aaa; margin-left: 2px; }
 
 /* ── Alertes ─────────────────────────────────────────────────────────────── */
-.alert-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: .82rem;
-    padding: .4rem 0;
-    border-bottom: 1px solid #f5f5f5;
-    color: #555;
-}
-
+.alert-row  { display: flex; justify-content: space-between; font-size: .82rem; padding: .4rem 0; border-bottom: 1px solid #f5f5f5; color: #555; }
 .alert-row:last-child { border-bottom: none; }
+.alert-time { background: #fff3e0; color: #e67e22; font-size: .75rem; padding: 2px 8px; border-radius: 4px; font-weight: 600; }
+.no-alerts  { font-size: .82rem; color: #bbb; }
 
-.alert-time {
-    background: #fff3e0;
-    color: #e67e22;
-    font-size: .75rem;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 600;
-}
+/* ── Confort thermique ───────────────────────────────────────────────────── */
+.comfort-box   { border-radius: 8px; padding: 1.25rem; text-align: center; }
+.comfort-label { font-size: .85rem; font-weight: 600; margin-bottom: 4px; }
+.comfort-value { font-size: 1.8rem; font-weight: 700; margin-bottom: 4px; }
+.comfort-sub   { font-size: .75rem; opacity: .8; }
+.comfort-green  { background: #eafaf1; color: #1e8449; }
+.comfort-orange { background: #fef9e7; color: #d68910; }
+.comfort-red    { background: #fdecea; color: #c0392b; }
+.comfort-danger { background: #922b21; color: #fff; }
 
-.no-alerts { font-size: .82rem; color: #bbb; }
+/* ── Tendances ───────────────────────────────────────────────────────────── */
+.trend-block  { padding: .75rem 0; border-bottom: 1px solid #f5f5f5; }
+.trend-title  { font-size: .8rem; font-weight: 600; margin-bottom: 6px; }
+.trend-row    { display: flex; align-items: center; gap: 10px; }
+.trend-badge  { font-size: .8rem; font-weight: 600; padding: 4px 12px; border-radius: 12px; }
+.trend-up     { background: #fdecea; color: #c0392b; }
+.trend-down   { background: #eafaf1; color: #1e8449; }
+.trend-stable { background: #f5f5f5; color: #777; }
+.trend-slope  { font-size: .75rem; color: #bbb; }
+
+/* ── Anomalies ───────────────────────────────────────────────────────────── */
+.anomaly-block  { padding: .75rem 0; border-bottom: 1px solid #f5f5f5; }
+.anomaly-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; font-size: .85rem; font-weight: 600; }
+.anomaly-desc   { font-size: .78rem; color: #999; line-height: 1.4; }
+.anomaly-count  { font-size: .75rem; font-weight: 600; padding: 2px 10px; border-radius: 12px; }
+.anomaly-on     { background: #fdecea; color: #c0392b; }
+.anomaly-off    { background: #eafaf1; color: #1e8449; }
+.anomaly-note   { font-size: .75rem; color: #bbb; font-weight: 400; margin-left: 6px; }
+
+/* ── Risque inondation ───────────────────────────────────────────────────── */
+.risque-box     { border-radius: 8px; padding: 1rem; margin-bottom: 1rem; text-align: center; }
+.risque-label   { font-size: 1.2rem; font-weight: 700; margin-bottom: 4px; }
+.risque-niveau  { font-size: .82rem; margin-bottom: 4px; opacity: .85; }
+.risque-desc    { font-size: .78rem; opacity: .8; }
+.risque-faible  { background: #eafaf1; color: #1e8449; }
+.risque-modere  { background: #fef9e7; color: #d68910; }
+.risque-eleve   { background: #fdecea; color: #c0392b; }
+.risque-critique{ background: #7b241c; color: #fff; }
+
+.risque-bar-wrap   { margin-top: .5rem; }
+.risque-bar-track  { height: 12px; background: #f0f0f0; border-radius: 6px; overflow: hidden; margin-bottom: 4px; }
+.risque-bar-fill   { height: 100%; border-radius: 6px; background: linear-gradient(90deg,  #e74c3c, #f39c12, #27ae60); transition: width .5s; }
+.risque-bar-labels { display: flex; justify-content: space-between; font-size: .65rem; color: #bbb; }
+
+/* ── Conditions météo ────────────────────────────────────────────────────── */
+.meteo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.meteo-item { background: #f9f9f9; border-radius: 8px; padding: .75rem; text-align: center; }
+.meteo-icon { font-size: 1.4rem; margin-bottom: 4px; }
+.meteo-val  { font-size: 1.1rem; font-weight: 600; color: #333; }
+.meteo-label{ font-size: .72rem; color: #999; margin-top: 2px; }
 
 /* ── Couleurs sémantiques ────────────────────────────────────────────────── */
-.temp-color { color: #e74c3c; }
-.hum-color  { color: #27ae60; }
-.dist-color { color: #2980b9; }
+.temp-color   { color: #e74c3c; }
+.hum-color    { color: #27ae60; }
+.niveau-color { color: #0ea5e9; }

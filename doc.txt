@@ -1,0 +1,167 @@
+09/03/2026
+1)Montage matériel
+    Ultra son
+        trig D9
+        echo D10
+    Capteur de température + humidite
+        D7
+    LED
+    	D8
+    Bluetooth 
+    	TX, RX
+    
+16/03/2026
+2)Appli WEB (USB)
+    Lire les data de l'arduino IDE
+    Script python
+        extrait ces data
+        insert dans BD
+    PHP
+        affichage WEB
+            courbe JS
+            	- 2 courbes (mettre filtre)
+            	- donnée actuelle sur le graphe
+3)Appli MOBILE
+    Lire les data (Bluetooth)
+	-temperature et distance   	
+    Extraire les data
+    
+23/03/2026
+    Insert BD
+    Affichage
+    	graphe
+   
+30/03/2026
+Thème proposé :
+	ventilateur
+
+Technos utilisés :
+	Embarqué : IDE Arduino + capteurs US  + capteurs de température et humidité + bluetooth
+	Web : script python, php, JS, chartJS + MySQL
+	Mobile : android studio + Java + SQLite
+
+Modification
+	WEB
+		ajout de la courbe d'humidité partie web
+		ajout de dashboard 
+			stat max, min, moyenne par jour de chaque paramètre (à partir de vue dans la BD)
+		fusion de données pour prendre un decision : sec => ventilateur .....
+		
+	MOBILE
+		ajout des menus pour chaque courbe avec leurs statistiques
+		ajout de notifications X	
+    
+    
+   Présentation
+   Rapport
+   Contrôle (code)
+   
+  15/04/2026
+  mise en place d'une appli orienté IA - Arduino
+  	complexité
+  	paramètre
+  	prise de décision
+  	prévision
+  		IA -> apprentissage/le cerveau
+  Materiel -> Logiciel -> IA 
+  	Data: -vers prise de décision
+  	      -vers IA		
+  Idée : allumage des LEDS
+  		
+23/04/2023
+Web 
+    ajouter des composants pour la visualisation
+        Indice de confort
+            Calcul heat index depuis temp + humidité. Affiche "Confortable", "Chaud", "Étouffant" avec une couleur.
+        Jauge niveau d'eau
+            Barre verticale animée qui monte/descend selon la distance. Rouge si niveau critique (< 10 cm de distance = plein).
+        Tendance
+            Flèche ↑ ↓ → calculée sur les 10 dernières mesures par régression linéaire simple. Montée / stable / descente.
+        Anomalies
+            Points mis en rouge sur les courbes si valeur > moyenne ± 2 écarts-types. Compteur d'anomalies dans les stats.
+
+
+Calcul des statistiques
+    ÉCART-TYPE (standard deviation)
+        Mesure la dispersion des valeurs autour de la moyenne.
+        Plus l'écart-type est grand, plus les valeurs sont dispersées.
+        
+        Formule :
+            σ = √( Σ(xi - x̄)² / n )
+        
+            xi  = chaque valeur
+            x̄   = moyenne de toutes les valeurs
+            n   = nombre de valeurs
+        
+        Exemple : valeurs [18, 19, 20, 19, 21]
+            moyenne = 19.4
+            variance = ((18-19.4)² + (19-19.4)² + ...) / 5 = 0.84
+            écart-type = √0.84 ≈ 0.92
+            → une valeur à 22°C serait à (22-19.4)/0.92 ≈ 2.8σ → anomalie détectée
+
+    TENDANCE par régression linéaire simple
+        Calcule la "pente" d'une droite qui passe au mieux à travers toutes
+        les mesures dans le temps. Cela indique si la valeur monte, descend
+        ou reste stable globalement.
+                Formule de la pente (slope) :
+          slope = Σ( (xi - x̄)(yi - ȳ) ) / Σ( (xi - x̄)² )
+                  xi  = indice de la mesure (0, 1, 2, 3...)
+          x̄   = moyenne des indices
+          yi  = valeur de la mesure (temp, hum, dist...)
+          ȳ   = moyenne des valeurs
+                Interprétation de la pente :
+          slope > +0.1  → tendance à la HAUSSE  ↑
+          slope < -0.1  → tendance à la BAISSE  ↓
+          entre les deux → STABLE               →
+                Exemple : températures [18, 19, 19.5, 20, 21]
+          La droite monte → slope ≈ +0.75 → direction = 'up'
+
+    INDICE DE CONFORT THERMIQUE (Heat Index)
+        Calcule la température RESSENTIE en combinant la température réelle
+        et l'humidité relative. Plus l'humidité est élevée, plus il fait
+        chaud "ressenti" car la transpiration s'évapore moins bien.
+
+        Formule de Steadman (version polynomiale à 9 termes) :
+        HI = c1 + c2*T + c3*H + c4*T*H + c5*T² + c6*H² + c7*T²*H + c8*T*H² + c9*T²*H²
+
+        T  = température en °C
+        H  = humidité relative en %
+        c1..c9 = constantes empiriques de Steadman
+
+        Seuils de confort :
+        HI < 27°C  → Confortable  (vert)
+        HI < 32°C  → Chaud        (orange)
+        HI < 38°C  → Très chaud   (rouge)
+        HI >= 38°C → Étouffant    (danger)
+
+    COMPTAGE DES ANOMALIES
+        Une valeur est considérée comme anomalie si elle s'écarte de plus
+        de 2 écarts-types (2σ) par rapport à la moyenne.
+
+        Règle des 2σ :
+        Dans une distribution normale, ~95% des valeurs se trouvent
+        dans l'intervalle [moyenne - 2σ, moyenne + 2σ].
+        Toute valeur en dehors de cet intervalle est statistiquement
+        peu probable → considérée comme anomalie.
+
+        Condition : |valeur - moyenne| > 2 × écart-type
+
+        Exemple : moyenne = 19°C, écart-type = 0.5°C
+        Intervalle normal : [18°C, 20°C]
+        Une valeur à 21.5°C → |21.5 - 19| = 2.5 > 2×0.5 = 1 → anomalie
+
+    FORMAT DE LA DERNIÈRE MESURE + NIVEAU D'EAU
+        Logique du capteur ultrason placé EN HAUT (ex: sous un pont, au dessus de l'eau) :
+        distance GRANDE  →  eau LOIN du capteur  →  niveau BAS   →  pas de danger
+        distance PETITE  →  eau PRÈS du capteur  →  niveau HAUT  →  danger inondation
+                            [capteur ultrason]
+                                |
+                                | ← distance mesurée
+                                |
+        ══════════════════ surface de l'eau ══════════════════
+        Seuils d'alerte (distance en cm) :
+            dist < 50  → Critique  (eau très proche du capteur = inondation)
+            dist < 100 → Élevé
+            dist < 150 → Modéré
+            dist >= 150 → Faible   (eau loin = niveau normal)
+        
